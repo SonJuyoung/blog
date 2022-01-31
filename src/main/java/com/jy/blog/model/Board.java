@@ -1,5 +1,9 @@
 package com.jy.blog.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.ManyToAny;
@@ -7,8 +11,13 @@ import org.hibernate.annotations.ManyToAny;
 import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.List;
 
-@Entity
+@Entity //ORM : JAVA OBJECT -> 테이블로 매핑
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Board {
 
     @Id//pk
@@ -27,6 +36,9 @@ public class Board {
     @ManyToOne //Many=Board, User = One
     @JoinColumn(name = "userId")
     private User user; //db는 오브젝트를 저장할 수 없다. 외래키 사용, 자바는 오브젝트 저장할 수 있다.
+
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER) // mappedBy 연관광계의 주인이 아니다(외래키 아님), DB에 컬럼 생성X
+    private List<Reply> reply;
 
     @CreationTimestamp
     private Timestamp createDate;
