@@ -19,20 +19,19 @@ public class UserService {
     private BCryptPasswordEncoder encoder;
 
     @Transactional
-    public int join(User user) {
+    public void join(User user) {
         try {
             String rawPassword = user.getPassword(); //원래 비번
             String encPassword = encoder.encode(rawPassword); //비번 hash화
             user.setPassword(encPassword);
             user.setRole(RoleType.USER);
             userRepository.save(user);
-            return 1;
         } catch (Exception e) {
             e.printStackTrace();
-        } return 0;
+        }
     }
 
-//    @Transactional(readOnly = true)//select할 때 트랜잭션 시작, 서브시ㅡ 종료시에 트랜잭션 종료(정합성 유지)
+//    @Transactional(readOnly = true)//select할 때 트랜잭션 시작, 서비스 종료시에 트랜잭션 종료(정합성 유지)
 //    public User login(User user) {
 //        return userRepository.findByUsernameAndPassword(user.getUsername(), user.getPassword());
 //    }

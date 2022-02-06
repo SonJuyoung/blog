@@ -1,7 +1,10 @@
 package com.jy.blog.config;
 
+import com.jy.blog.config.auth.PrincipalDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,9 +17,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableGlobalMethodSecurity(prePostEnabled = true) //특정 주소로 접근을 하면 권한 및 인증을 미리 체크한다는 뜻
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private PrincipalDetailService principalDetailService;
+
     @Bean //ioc
     public BCryptPasswordEncoder encodePWD() {
         return new BCryptPasswordEncoder();
+    }
+
+    //시큐리티가 대신 로그인해주고 password를 가로채기를 함
+    //해당 password가 뭘로 해쉬가 되어서 회원가입이 되었는지 알아야 같은 해쉬로 암호화해서 db에 있는 해쉬랑 비교할 수 있음.
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(principalDetailService).passwordEncoder(encodePWD());
     }
 
     @Override
@@ -30,6 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticated()
             .and()
                 .formLogin()
-                .loginPage("/auth/loginForm");
+                .loginPage("/auth/loginForm")
+                .loginProcessingUrl("/auth/loginProc") //스프링 시큐리티가 해당 주소로의 요청을 가로채서 대신 로그인 한다.
+                .defaultSuccessUrl("/"); //성공했을때 url
+//                .failureUrl() 실패했을 때
     }
 }
