@@ -30,10 +30,9 @@ public class Board {
     @Lob //대용량 데이터
     private String content; //섬머노트 라이브러리 html태그가 섞여서 디자인 됨
 
-    @ColumnDefault("0")
     private int count;
 
-    @ManyToOne //Many=Board, User = One
+    @ManyToOne(fetch = FetchType.EAGER) //Many=Board, User = One
     @JoinColumn(name = "userId")
     private User user; //db는 오브젝트를 저장할 수 없다. 외래키 사용, 자바는 오브젝트 저장할 수 있다.
 

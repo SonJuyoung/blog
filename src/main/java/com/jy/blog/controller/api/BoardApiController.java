@@ -1,34 +1,34 @@
 package com.jy.blog.controller.api;
 
+import com.jy.blog.config.auth.PrincipalDetail;
 import com.jy.blog.dto.ResponseDto;
-import com.jy.blog.model.RoleType;
+import com.jy.blog.model.Board;
 import com.jy.blog.model.User;
+import com.jy.blog.service.BoardService;
 import com.jy.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-
 @RestController
-public class UserApiController {
+public class BoardApiController {
 
     @Autowired
-    private UserService userService;
+    private BoardService boardService;
 
-    @Autowired
-    private BCryptPasswordEncoder encode;
-
-    @PostMapping("/auth/joinProc")
-    public ResponseDto<Integer> save(@RequestBody User user) {
-        System.out.println("save 호출됨");
-        userService.join(user);
+    @PostMapping("/api/board")
+    public ResponseDto<Integer> save(@RequestBody Board board, @AuthenticationPrincipal PrincipalDetail principal) {
+        boardService.write(board, principal.getUser());
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
-
+    @DeleteMapping("/api/board/{id}")
+    public ResponseDto<Integer> deleteById(@PathVariable int id) {
+        boardService.delete(id);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 
 }
 

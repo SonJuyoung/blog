@@ -14,7 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //빈 등록 : 스프링 컨테이너에서 객체를 관리할 수 있게 하는 것
 @Configuration // 빈등록 ioc관리
 @EnableWebSecurity //시큐리티 필터가 등록이 된다.
-@EnableGlobalMethodSecurity(prePostEnabled = true) //특정 주소로 접근을 하면 권한 및 인증을 미리 체크한다는 뜻
+@EnableGlobalMethodSecurity(prePostEnabled = true) //특정 주소로 접근을 하면 권한 및 인증을 미리 체크
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -49,3 +49,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .failureUrl() 실패했을 때
     }
 }
+// xss : 자바스크립트 공격, csrf : 쿼리스트링(get방식, 하이퍼링크) 공격

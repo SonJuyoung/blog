@@ -20,15 +20,11 @@ public class UserService {
 
     @Transactional
     public void join(User user) {
-        try {
             String rawPassword = user.getPassword(); //원래 비번
             String encPassword = encoder.encode(rawPassword); //비번 hash화
             user.setPassword(encPassword);
             user.setRole(RoleType.USER);
             userRepository.save(user);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 //    @Transactional(readOnly = true)//select할 때 트랜잭션 시작, 서비스 종료시에 트랜잭션 종료(정합성 유지)
