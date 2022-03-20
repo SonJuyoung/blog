@@ -3,7 +3,7 @@
 <%@ include file="layout/header.jsp"%>
 
 <div class="container">
-    <c:forEach var="board" items="${boards.content}">
+    <c:forEach var="board" items="${boards.content}"> <%-- 컨트롤러에서 boards로 담아서 보내줬지만 paging 처리 했기때문에 boards.content로 불러와야 오류 안남 --%>
     <div class="card m-2">
         <div class="card-body">
             <h4 class="card-title">${board.title}</h4>
@@ -14,7 +14,7 @@
 
     <ul class="pagination justify-content-center">
         <c:choose>
-            <c:when test="${boards.first}">
+            <c:when test="${boards.first}">  <%-- 첫번째 페이지라면 --%>
                 <li class="page-item disabled"><a class="page-link" href="?page=${boards.number-1}">Previous</a></li>
             </c:when>
             <c:otherwise>

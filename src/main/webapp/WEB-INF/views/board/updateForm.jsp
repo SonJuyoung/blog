@@ -6,12 +6,10 @@
     <form>
         <input type="hidden" id="id" value="${board.id}"/>
         <div class="form-group">
-            <label for="title">Title</label>
             <input value="${board.title}" type="text" class="form-control" placeholder="Enter title" id="title">
         </div>
 
         <div class="form-group">
-            <label for="content">Content</label>
             <textarea class="form-control summernote" rows="5" id="content">${board.content}</textarea>
         </div>
     </form>

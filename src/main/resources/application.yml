@@ -35,3 +35,6 @@ spring:
     serialization:
      fail-on-empty-beans: false
 
+#카카로 로그인으로 들어오는 키 통일
+cos:
+  key: cos1234

@@ -1,8 +1,10 @@
 package com.jy.blog.controller.api;
 
 import com.jy.blog.config.auth.PrincipalDetail;
+import com.jy.blog.dto.ReplySaveRequestDto;
 import com.jy.blog.dto.ResponseDto;
 import com.jy.blog.model.Board;
+import com.jy.blog.model.Reply;
 import com.jy.blog.model.User;
 import com.jy.blog.service.BoardService;
 import com.jy.blog.service.UserService;
@@ -26,6 +28,15 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 
+    //데이터 받을 때 컨트롤러에서 dto를 만들어서 받는게 좋다.
+    //dto 사용하지 않은 이유는
+    @PostMapping("/api/board/{boardId}/reply")
+    public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequestDto replySaveRequestDto) {
+
+        boardService.writeReply(replySaveRequestDto);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
     @DeleteMapping("/api/board/{id}")
     public ResponseDto<Integer> deleteById(@PathVariable int id) {
         boardService.delete(id);
@@ -35,6 +46,12 @@ public class BoardApiController {
     @PutMapping("/api/board/{id}")
     public ResponseDto<Integer> update(@PathVariable int id, @RequestBody Board board) {
         boardService.update(id, board);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("api/board/{boardId}/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable int replyId) {
+        boardService.deleteReply(replyId);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 }

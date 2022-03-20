@@ -15,6 +15,10 @@ let index = {
             document.querySelector("#btn-update").addEventListener("click", function () { //function을 쓸 때와 화살표 함수를 쓸 때 this가 가리키는 것이 달라진다. function의 this는 window, 화살표의 this는 index
                 index.update();
             })};
+        if(document.querySelector("#btn-reply-save")) {
+            document.querySelector("#btn-reply-save").addEventListener("click", function () { //function을 쓸 때와 화살표 함수를 쓸 때 this가 가리키는 것이 달라진다. function의 this는 window, 화살표의 this는 index
+                index.replySave();
+            })};
         },
 
 
@@ -91,6 +95,49 @@ let index = {
             console.log(data)
         }).catch((e) => {
             alert("글수정에 실패했습니다.");
+            console.log(JSON.stringify(e));
+        })
+
+    },
+    replySave:function (){
+        let data = {
+            userId:document.querySelector("#userId").value,
+            boardId:document.querySelector("#boardId").value,
+            content:document.querySelector("#reply-content").value
+        };
+
+        //ajax 비동기 호출, 3개의 데이터를 json으로 변경해서 insert, ajax가 통신을 성공하고 서버가 json을 리턴하면 자동으로 자바 오브젝트로 변환
+        fetch(`/api/board/${data.boardId}/reply`, {
+            method : 'POST',
+            headers : {
+                'Content-Type': 'application/json' //body데이터가 어떤 타입인지
+            },
+            body : JSON.stringify(data), //http body데이터, 서버로 요청을 해서 응답이 왔을 때 기본적으로 모든 것이 문자열(생긴게 json이라면 자바스크립트 오브젝트로 변경)
+        }).then((res) => {
+            console.log(res);
+            alert("댓글 작성이 완료되었습니다.");
+            location.href=`/board/${data.boardId}`;
+            return res.json();
+        }).then((data) => {
+            console.log(data)
+        }).catch((e) => {
+            alert("댓글 작성에 실패했습니다.");
+            console.log(JSON.stringify(e));
+        })
+
+    },
+    replyDelete:function (boardId, replyId){
+        fetch(`/api/board/${boardId}/reply/${replyId}`, {
+            method : 'DELETE',
+         }).then((res) => {
+            console.log(res);
+            alert("댓글 삭제 성공.");
+            location.href=`/board/${boardId}`;
+            return res.json();
+        }).then((data) => {
+            console.log(data)
+        }).catch((e) => {
+            alert("댓글 삭제를 실패했습니다.");
             console.log(JSON.stringify(e));
         })
 

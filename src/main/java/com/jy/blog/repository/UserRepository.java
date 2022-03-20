@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     //select * from user where username = 1?;
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username); //<-네이밍 쿼리
 }
 
 //jpa naming 쿼리

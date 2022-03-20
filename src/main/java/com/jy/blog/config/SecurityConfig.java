@@ -4,6 +4,7 @@ import com.jy.blog.config.auth.PrincipalDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,6 +20,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private PrincipalDetailService principalDetailService;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
     @Bean //ioc
     public BCryptPasswordEncoder encodePWD() {
@@ -36,14 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .csrf().disable()//csrf 토큰 비활성화(테스트시 걸어주는게 좋음)
-            .authorizeRequests()
+            .authorizeRequests() //request 들어오면
                 .antMatchers("/", "/auth/**", "/js/**", "/css/**", "/image/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated()
             .and()
                 .formLogin()
-                .loginPage("/auth/loginForm")
+                .loginPage("/auth/loginForm") // 위에서 접근 허용한 페이지가 아닌 페이지로 들어오는 경우(인증이 되지 않은 요청) 이 주소로 이동한다.
                 .loginProcessingUrl("/auth/loginProc") //스프링 시큐리티가 해당 주소로의 요청을 가로채서 대신 로그인 한다.
                 .defaultSuccessUrl("/"); //성공했을때 url
 //                .failureUrl() 실패했을 때

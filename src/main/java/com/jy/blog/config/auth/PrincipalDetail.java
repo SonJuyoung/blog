@@ -57,12 +57,12 @@ public class PrincipalDetail implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         Collection<GrantedAuthority> collectors = new ArrayList<>();
-        collectors.add(new GrantedAuthority() {
-            @Override
-            public String getAuthority() {
-                return "ROLE_" + user.getRole(); // ROLE_USER
-            }
-        });
+//        collectors.add(new GrantedAuthority() {
+//            @Override
+//            public String getAuthority() {
+//                return "ROLE_" + user.getRole(); // ROLE_USER <- 이렇게 되어야 확인이 된다
+//            }
+//        });
 
         collectors.add(()->{return "ROLE_" + user.getRole();});//위에 collectors.add~ 람다식으로 표현
 

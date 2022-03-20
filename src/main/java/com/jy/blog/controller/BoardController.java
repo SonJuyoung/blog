@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@Controller
+@Controller //viewResolver 작동
 public class BoardController {
 
     @Autowired
@@ -23,7 +23,7 @@ public class BoardController {
     @GetMapping({"", "/"})
     public String index(Model model, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)Pageable pageable) {
         model.addAttribute("boards", boardService.list(pageable));
-        return "index"; //WEB-INF/views/index.jsp
+        return "index"; // /WEB-INF/views/index.jsp
     }
 
     @GetMapping("/board/{id}")
